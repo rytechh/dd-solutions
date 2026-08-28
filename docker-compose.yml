@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: greenshift-db
+    environment:
+      POSTGRES_DB: greenshift
+      POSTGRES_USER: greenshift
+      POSTGRES_PASSWORD: greenshift
+    ports:
+      - "5432:5432"
+    volumes:
+      - greenshift-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U greenshift -d greenshift"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    container_name: greenshift-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/greenshift
+      SPRING_DATASOURCE_USERNAME: greenshift
+      SPRING_DATASOURCE_PASSWORD: greenshift
+    ports:
+      - "8080:8080"
+
+volumes:
+  greenshift-data:

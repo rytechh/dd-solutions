@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: greenshift-api
+
+  # Perfil padrão: H2 em memória. A API sobe com um comando só, sem instalar nada.
+  datasource:
+    url: jdbc:h2:mem:greenshift;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+greenshift:
+  scheduler:
+    # De quanto em quanto tempo o executor procura jobs cuja janela já chegou.
+    intervalo-ms: 60000
+
+logging:
+  level:
+    br.com.rytechh.greenshift: INFO
+
+---
+# Perfil de produção/avaliação: PostgreSQL (docker compose sobe o banco junto).
+spring:
+  config:
+    activate:
+      on-profile: postgres
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/greenshift}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME:greenshift}
+    password: ${SPRING_DATASOURCE_PASSWORD:greenshift}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  h2:
+    console:
+      enabled: false
