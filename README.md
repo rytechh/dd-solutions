@@ -9,8 +9,7 @@ sem violar o prazo de negócio do cliente.
 > O alvo não é o consumidor final: são os **datacenters**. A mesma carga, rodada 16 horas
 > depois, pode emitir metade do carbono. O GreenShift descobre quando, faz o agendamento e
 > audita o resultado para o relatório de ESG.
-
-- **Líder Técnico:** Rai — Tecnólogo em Gestão da Tecnologia da Informação (GTI)
+> 
 - **Stack:** Java 21 · Spring Boot 3.3 · PostgreSQL · Docker · Arquitetura Hexagonal
 
 ---
